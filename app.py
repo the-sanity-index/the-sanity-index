@@ -1,3 +1,20 @@
+from PIL import Image
+
+sanity_logo = Image.open("sanity_logo.png")
+labyrinth_logo = Image.open("labyrinth_logo.png")
+
+col1, col2, col3 = st.columns([1, 3, 1])
+with col1:
+    st.image(labyrinth_logo, use_column_width=True)
+with col2:
+    st.markdown(
+        "<h1 style='text-align:center;color:silver;'>THE SANITY INDEX</h1>"
+        "<p style='text-align:center;color:gray;'>Cutting Through the Chaos</p>",
+        unsafe_allow_html=True
+    )
+with col3:
+    st.image(sanity_logo, use_column_width=True)
+st.markdown("<hr style='border:1px solid silver;'>", unsafe_allow_html=True)
 import streamlit as st
 import pandas as pd
 import plotly.graph_objs as go
@@ -90,3 +107,4 @@ st.markdown(
     "<hr><p style='text-align:center;color:gray;font-size:12px;'>Powered by Labyrinth Analytics © 2025</p>",
     unsafe_allow_html=True
 )
+
