@@ -1,0 +1,2826 @@
+{
+  "model": "Motherboard of Misery (MoM)",
+  "version": "1.0.0",
+  "composite": {
+    "scale": "0-100",
+    "baseline": 50,
+    "smoothing": {
+      "method": "ewma",
+      "span_months": 3
+    }
+  },
+  "normalisation_defaults": {
+    "method": "zscore",
+    "window_months": 12,
+    "clip": 3,
+    "z_to_100_sigma": 2
+  },
+  "sections": [
+    {
+      "id": "liquidity_plumbing",
+      "name": "Liquidity & Financial Plumbing",
+      "weight": 0.06,
+      "indicators": [
+        {
+          "id": "wresbal",
+          "name": "Reserve Balances (Fed)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "on_rrp",
+          "name": "ON RRP Usage",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "tga",
+          "name": "Treasury General Account",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "sofr_effr_spread",
+          "name": "SOFR - EFFR (bps)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "repo_fails",
+          "name": "Repo Fails (UST, $bn)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "bill_onrrp_spread",
+          "name": "T-bill - ON RRP (bps)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "move",
+          "name": "MOVE Index",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "hy_oas",
+          "name": "HY OAS (bps)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "curve_3m10y",
+          "name": "3m-10y Curve (bps)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        }
+      ]
+    },
+    {
+      "id": "bank_bs_funding",
+      "name": "Bank Balance Sheet & Funding Risk",
+      "weight": 0.08,
+      "indicators": [
+        {
+          "id": "cet1_ratio",
+          "name": "CET1 Ratio (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "slr",
+          "name": "Supplementary Leverage Ratio (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "lcr",
+          "name": "Liquidity Coverage Ratio (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "nsfr",
+          "name": "Net Stable Funding Ratio (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "hqlA_assets_share",
+          "name": "HQLA / Assets (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "encumbrance_ratio",
+          "name": "Encumbrance Ratio (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "loan_deposit_ratio",
+          "name": "Loan-to-Deposit Ratio (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "uninsured_deposit_share",
+          "name": "Uninsured Deposit Share (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "deposit_beta",
+          "name": "Deposit Beta (pp)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "wholesale_funding_share",
+          "name": "Wholesale Funding Share (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "discount_window_usage",
+          "name": "Discount Window / SRF Usage ($bn)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "aoci_losses",
+          "name": "AOCI / HTM Fair-Value Loss ($bn)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "irrbb_eve_sens",
+          "name": "IRRBB \u0394EVE (bp shock) (% Assets)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "npl_ratio",
+          "name": "NPL Ratio (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "cre_exposure_share",
+          "name": "CRE Exposure (% CET1)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        },
+        {
+          "id": "maturity_wall_12m_liabs",
+          "name": "Wholesale Liab. \u226412m (% Liab)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.0625
+        }
+      ]
+    },
+    {
+      "id": "prices_inflation",
+      "name": "Prices & Inflation Dynamics",
+      "weight": 0.07,
+      "indicators": [
+        {
+          "id": "cpi_headline_yoy",
+          "name": "CPI Headline YoY (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "cpi_core_yoy",
+          "name": "CPI Core YoY (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "cpi_trimmed_yoy",
+          "name": "Trimmed-Mean CPI YoY (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "food_energy_cpi_yoy",
+          "name": "Food+Energy CPI YoY (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "ppi_minus_cpi",
+          "name": "PPI - CPI (pp)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "wage_minus_cpi",
+          "name": "Wage Growth - CPI (pp)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "breakeven_5y",
+          "name": "5y Breakeven Inflation (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "tips_be_vol",
+          "name": "TIPS BE Volatility (\u03c3)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        }
+      ]
+    },
+    {
+      "id": "labour_market",
+      "name": "Labour Market Stress",
+      "weight": 0.06,
+      "indicators": [
+        {
+          "id": "initial_claims",
+          "name": "Initial Claims (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "continuing_claims",
+          "name": "Continuing Claims (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "vacancies_level",
+          "name": "Job Vacancies (index)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "quits_rate",
+          "name": "Quits Rate (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "layoff_rate",
+          "name": "Layoffs Rate (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "avg_weekly_hours",
+          "name": "Average Weekly Hours",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "part_time_econ",
+          "name": "Part-time for Economic Reasons (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "participation_rate",
+          "name": "Labour Participation Rate (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        }
+      ]
+    },
+    {
+      "id": "household_income_spend",
+      "name": "Household Income & Spending",
+      "weight": 0.06,
+      "indicators": [
+        {
+          "id": "real_rhdi_yoy",
+          "name": "Real Household Disposable Income YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "savings_ratio",
+          "name": "Savings Ratio (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "real_retail_sales_pc_yoy",
+          "name": "Real Retail Sales per Capita YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "essentials_share",
+          "name": "Essentials Share of Spend (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "card_spend_disc_yoy",
+          "name": "Card Spend: Discretionary YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "card_spend_necess_yoy",
+          "name": "Card Spend: Necessities YoY (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        }
+      ]
+    },
+    {
+      "id": "consumer_misery",
+      "name": "Consumer Distress & Misery Basket",
+      "weight": 0.05,
+      "indicators": [
+        {
+          "id": "down_trading_search",
+          "name": "Search: cheapest/own brand/bulk (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "repair_substitution",
+          "name": "Repair/DIY vs Buy-New Ratio",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "coping_search",
+          "name": "Search: can't sleep/burnout/mindfulness (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "desperation_search",
+          "name": "Search: gambling/payday/loan (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "vice_index",
+          "name": "Vice Index (alcohol/tobacco/fast-food)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "escape_index",
+          "name": "Escape Index (streaming/gaming/conspiracy)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        }
+      ]
+    },
+    {
+      "id": "hh_credit_delinquencies",
+      "name": "Household Credit & Delinquencies",
+      "weight": 0.05,
+      "indicators": [
+        {
+          "id": "cc_balances_yoy",
+          "name": "Credit-Card Balances YoY (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "cc_utilisation",
+          "name": "Credit-Card Utilisation (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "cc_30dpd",
+          "name": "Card 30+ DPD (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "cc_chargeoff_rate",
+          "name": "Card Charge-off Rate (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "bnpl_delinquencies",
+          "name": "BNPL Delinquencies (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "dsr_households",
+          "name": "Household Debt-Service Ratio (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        }
+      ]
+    },
+    {
+      "id": "corp_leverage_maturity",
+      "name": "Corporate Leverage & Maturity Wall",
+      "weight": 0.06,
+      "indicators": [
+        {
+          "id": "net_debt_ebitda",
+          "name": "Net Debt/EBITDA (x)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "interest_coverage",
+          "name": "Interest Coverage (x)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "floating_rate_share",
+          "name": "Floating-Rate Debt Share (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "maturity_wall_12_36m",
+          "name": "Maturities \u226436m ($bn)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "hy_default_rate",
+          "name": "HY Default Rate (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "loan_default_rate",
+          "name": "Loan Default Rate (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "distress_ratio",
+          "name": "Distress Ratio (% of bonds >1k bps)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "cov_lite_share",
+          "name": "Covenant-lite Share (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "zombie_share",
+          "name": "Zombies (ICR<1, \u22653q) (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        }
+      ]
+    },
+    {
+      "id": "shadow_finance",
+      "name": "Shadow Finance (MMFs/Private Credit/CLOs/HFs)",
+      "weight": 0.04,
+      "indicators": [
+        {
+          "id": "mmf_aum",
+          "name": "MMF AUM ($bn)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "mmf_prime_share",
+          "name": "Prime MMF Share (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "private_credit_aum",
+          "name": "Private Credit AUM ($bn)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "clo_aaa_spread",
+          "name": "CLO AAA Spread (bps)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "clo_ccc_bucket",
+          "name": "CLO CCC Bucket (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "lsta_price_lt95_share",
+          "name": "Loan Prices <95 Share (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "hf_leverage",
+          "name": "Hedge Fund Leverage (gross/net)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "prop_fund_gates",
+          "name": "Property Fund Gates/Outflows (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        }
+      ]
+    },
+    {
+      "id": "market_micro_flows",
+      "name": "Market Microstructure & Flows",
+      "weight": 0.04,
+      "indicators": [
+        {
+          "id": "etf_flows",
+          "name": "ETF Flows ($bn, net)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "mutual_fund_flows",
+          "name": "Mutual Fund Flows ($bn, net)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "buybacks",
+          "name": "Corporate Buybacks ($bn)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "margin_debt",
+          "name": "Margin Debt ($bn)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "put_call_ratio",
+          "name": "Put/Call Ratio",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "skew_vvix",
+          "name": "SKEW/VVIX (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "breadth_pct_above_200d",
+          "name": "% Stocks >200d MA",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "orderbook_depth",
+          "name": "Order-Book Depth (proxy)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        }
+      ]
+    },
+    {
+      "id": "housing_owner",
+      "name": "Housing \u2014 Owner/Mortgage",
+      "weight": 0.05,
+      "indicators": [
+        {
+          "id": "mortgage_approvals",
+          "name": "Mortgage Approvals (index)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "mortgage_rate_spread",
+          "name": "Mortgage Rate - OIS/MBS (bps)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "house_price_yoy",
+          "name": "House Price YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "price_to_income",
+          "name": "Price-to-Income (x)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "remortgage_shock",
+          "name": "Refi Payment Shock (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "ltv_90_share",
+          "name": "LTV \u226590% Share (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "neg_equity_share",
+          "name": "Negative Equity Share (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "mortgage_arrears",
+          "name": "Mortgage Arrears (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        }
+      ]
+    },
+    {
+      "id": "housing_rent",
+      "name": "Housing \u2014 Rent & Affordability",
+      "weight": 0.03,
+      "indicators": [
+        {
+          "id": "rent_infl_yoy",
+          "name": "Rent Inflation YoY (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.2
+        },
+        {
+          "id": "rent_income_ratio",
+          "name": "Rent-to-Income Ratio (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.2
+        },
+        {
+          "id": "rent_burden_gt30_share",
+          "name": "Rent Burden >30% Share (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.2
+        },
+        {
+          "id": "rental_vacancy",
+          "name": "Rental Vacancy Rate (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.2
+        },
+        {
+          "id": "eviction_filings",
+          "name": "Eviction Filings (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "cre_construct",
+      "name": "Commercial Property & Construction",
+      "weight": 0.04,
+      "indicators": [
+        {
+          "id": "cre_prices_office_yoy",
+          "name": "CRE Office Prices YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.142857
+        },
+        {
+          "id": "cre_prices_retail_yoy",
+          "name": "CRE Retail Prices YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.142857
+        },
+        {
+          "id": "cre_vacancy_office",
+          "name": "CRE Vacancy Office (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.142857
+        },
+        {
+          "id": "cre_impairments",
+          "name": "CRE Loan Impairments (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.142857
+        },
+        {
+          "id": "cmdbs_delinquencies",
+          "name": "CMBS Delinquencies (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.142857
+        },
+        {
+          "id": "construction_output_yoy",
+          "name": "Construction Output YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.142857
+        },
+        {
+          "id": "construction_insolvencies",
+          "name": "Construction Insolvencies (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.142857
+        }
+      ]
+    },
+    {
+      "id": "sme_corp_health",
+      "name": "SME & Corporate Health (Trading/Payments)",
+      "weight": 0.05,
+      "indicators": [
+        {
+          "id": "sme_insolvencies",
+          "name": "SME Insolvencies (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "trade_credit_claims",
+          "name": "Trade-Credit Insurance Claims (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "invoice_fin_arrears",
+          "name": "Invoice-Finance Arrears (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "bank_lending_smes_yoy",
+          "name": "Bank Lending to SMEs YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "b2b_days_past_due",
+          "name": "B2B Days Past Due (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "sme_sentiment",
+          "name": "SME Sentiment (index)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        }
+      ]
+    },
+    {
+      "id": "retail_ecom",
+      "name": "Retail & E\u2011Commerce Pulse",
+      "weight": 0.03,
+      "indicators": [
+        {
+          "id": "retail_ex_auto_yoy",
+          "name": "Retail Sales ex-Auto YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "ecom_net_sales_yoy",
+          "name": "E\u2011Com Net Sales YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "units_vs_asp",
+          "name": "Units vs ASP (index)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "footfall_index",
+          "name": "Footfall Index",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "discount_depth",
+          "name": "Discount Depth Index",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "inventory_to_sales",
+          "name": "Inventory-to-Sales (x)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        }
+      ]
+    },
+    {
+      "id": "hospitality_leisure",
+      "name": "Hospitality & Leisure Distress",
+      "weight": 0.03,
+      "indicators": [
+        {
+          "id": "afs_insolvencies",
+          "name": "Accommodation & Food Insolvencies (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.25
+        },
+        {
+          "id": "real_hosp_spend_yoy",
+          "name": "Real Hospitality Spend YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.25
+        },
+        {
+          "id": "input_vs_sales_spread",
+          "name": "Food+Energy Inputs - Sales Growth (pp)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.25
+        },
+        {
+          "id": "occupancy_rate",
+          "name": "Hotel/Restaurant Occupancy (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.25
+        }
+      ]
+    },
+    {
+      "id": "public_finance",
+      "name": "Public Finance & Sovereign Stress",
+      "weight": 0.05,
+      "indicators": [
+        {
+          "id": "debt_gdp",
+          "name": "Debt/GDP (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "interest_cost_revenue",
+          "name": "Interest Cost / Revenue (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "yield_shock_90d",
+          "name": "Yield Shock +100bp/90d (bps)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "cds_spread",
+          "name": "Sovereign CDS (bps)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "auction_tail",
+          "name": "Auction Tail (bps)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "bid_cover",
+          "name": "Bid/Cover",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "cash_receipts_yoy",
+          "name": "Cash Receipts YoY (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "local_govt_distress",
+          "name": "Local Govt Distress Events (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        },
+        {
+          "id": "wam_years",
+          "name": "Debt WAM (years)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.111111
+        }
+      ]
+    },
+    {
+      "id": "logistics_trade",
+      "name": "Logistics & Trade",
+      "weight": 0.03,
+      "indicators": [
+        {
+          "id": "pmi_export_orders",
+          "name": "PMI New Export Orders (index)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "supplier_delivery_times",
+          "name": "PMI Supplier Delivery Times (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "freightos_fbx",
+          "name": "Freightos FBX (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "baltic_dry",
+          "name": "Baltic Dry Index",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "port_throughput",
+          "name": "Port Throughput (index)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "truck_tonnage",
+          "name": "Truck Tonnage (index)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        }
+      ]
+    },
+    {
+      "id": "health_social",
+      "name": "Health & Social Strain",
+      "weight": 0.03,
+      "indicators": [
+        {
+          "id": "mh_referrals",
+          "name": "Mental-Health Referrals (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "anxiolytic_rx",
+          "name": "Anxiolytic Rx (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "sickness_absence_stress",
+          "name": "Sickness Absence (Stress) (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "health_wait_times",
+          "name": "Health System Wait Times (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "food_bank_usage",
+          "name": "Food-Bank Usage (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        },
+        {
+          "id": "homelessness",
+          "name": "Homelessness (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.166667
+        }
+      ]
+    },
+    {
+      "id": "crime_civil",
+      "name": "Crime & Civil Order",
+      "weight": 0.02,
+      "indicators": [
+        {
+          "id": "shoplifting",
+          "name": "Shoplifting (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.333333
+        },
+        {
+          "id": "civil_disorder_events",
+          "name": "Protests/Disorder Events (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.333333
+        },
+        {
+          "id": "strike_days",
+          "name": "Strike Days Lost (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.333333
+        }
+      ]
+    },
+    {
+      "id": "politics_institutional",
+      "name": "Political & Institutional Confidence",
+      "weight": 0.03,
+      "indicators": [
+        {
+          "id": "approval_rate",
+          "name": "Govt Approval (%)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.25
+        },
+        {
+          "id": "trust_institutions",
+          "name": "Trust in Institutions (index)",
+          "transform": "level",
+          "direction": "lower_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.25
+        },
+        {
+          "id": "policy_uncertainty",
+          "name": "Policy Uncertainty Index",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.25
+        },
+        {
+          "id": "election_risk_search",
+          "name": "Election/Shock Search (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.25
+        }
+      ]
+    },
+    {
+      "id": "geopolitics_war",
+      "name": "Geopolitical & War\u2011Economy",
+      "weight": 0.04,
+      "indicators": [
+        {
+          "id": "defence_spend_yoy",
+          "name": "Defence Spend YoY (%)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "arms_equity_perf",
+          "name": "Arms-Contractor Equity Outperformance (pp)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "export_licences_arms",
+          "name": "Arms Export Licences (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "energy_commodity_vol",
+          "name": "Energy/Commodity Volatility (\u03c3)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "shipping_reroutes",
+          "name": "Shipping Reroutes Near Conflict (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "insurance_premia_routes",
+          "name": "Marine/Aviation Insurance Premia (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "war_escalation_lexicon",
+          "name": "War Escalation Lexicon (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        },
+        {
+          "id": "panic_search_war",
+          "name": "Panic Search: WW3/draft/iodine (index)",
+          "transform": "level",
+          "direction": "higher_is_worse",
+          "frequency": "monthly",
+          "normalise": {
+            "method": "zscore",
+            "window_months": 12,
+            "clip": 3,
+            "z_to_100_sigma": 2
+          },
+          "expr": null,
+          "meta": {},
+          "tags": [],
+          "section_weight": 0.125
+        }
+      ]
+    }
+  ]
+}
