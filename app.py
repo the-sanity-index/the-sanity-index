@@ -17,7 +17,7 @@ try:
 
     col1, col2, col3 = st.columns([1, 3, 1])
     with col1:
-        st.image(labyrinth_logo, use_column_width=True)
+        st.image(labyrinth_logo, use_container_width=True)
     with col2:
         st.markdown(
             "<h1 style='text-align:center;color:silver;'>THE SANITY INDEX</h1>"
@@ -25,7 +25,7 @@ try:
             unsafe_allow_html=True
         )
     with col3:
-        st.image(sanity_logo, use_column_width=True)
+        st.image(sanity_logo, use_container_width=True)
 except Exception:
     st.markdown(
         """
