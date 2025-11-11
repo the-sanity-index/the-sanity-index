@@ -2,3 +2,6 @@ streamlit>=1.39
 pandas>=2.0
 plotly>=5.22
 Pillow>=10.0
+fastapi>=0.115     # if you’re running the free API
+uvicorn>=0.30      # if you’re running the free API
+httpx>=0.27
