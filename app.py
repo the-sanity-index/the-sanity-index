@@ -40,6 +40,30 @@ except Exception:
     )
 
 st.markdown("<hr style='border:1px solid silver;'>", unsafe_allow_html=True)
+import os, httpx
+API_BASE = os.getenv("SANITY_API_BASE", "http://localhost:8000")  # set on Render later
+
+def fetch_json(path, params=None, default=None):
+    try:
+        with httpx.Client(timeout=4) as c:
+            r = c.get(f"{API_BASE}{path}", params=params); r.raise_for_status()
+            return r.json()
+    except Exception:
+        return default
+
+st.markdown("### Live Board (free)")
+quotes = fetch_json("/indices") or {}
+crypto = fetch_json("/crypto", {"ids":"bitcoin,ethereum"}) or {}
+
+if quotes.get("data"):
+    q = quotes["data"]
+    st.markdown(
+        f"**SPX** {q['^GSPC']['last']}  |  **NDX** {q['^NDX']['last']}  |  "
+        f"**FTSE** {q['^FTSE']['last']}  |  **DAX** {q['^GDAXI']['last']}"
+    )
+if crypto.get("data"):
+    c = crypto["data"]
+    st.markdown(f"**BTC** ${c['BITCOIN']['USD']}  |  **ETH** ${c['ETHEREUM']['USD']}")
 
 # -------------------------------------------------------------------------
 # Load Data
@@ -135,4 +159,5 @@ st.markdown(
     "</p>",
     unsafe_allow_html=True
 )
+
 
