@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objs as go
 from PIL import Image
+from sanity_ui import sanity_title, sanity_caption, sanity_section, sanity_inject_css
+sanity_inject_css(theme="dark")
 
 # -------------------------------------------------------------------------
 # Page setup
@@ -133,3 +135,4 @@ st.markdown(
     "</p>",
     unsafe_allow_html=True
 )
+
