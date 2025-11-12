@@ -67,6 +67,18 @@ async def yahoo_quote_single(symbol: str):
     }
 
 @API.get("/indices")
+@API.get("/quote")
+async def quote(symbol: str = Query(..., alias="symbols")):
+    """
+    Single-symbol quote endpoint.
+    Usage:
+        /quote?symbols=^GSPC
+    """
+    try:
+        result = await yahoo_quote_single(symbol)
+        return {"ts": now_ts(), "data": result}
+    except Exception as e:
+        return {"ts": now_ts(), "error": str(e)}
 async def indices():
     """Fetch multiple global indices (SPX/NDX/FTSE/DAX/N225/HSI) one-at-a-time."""
     symbols = ["^GSPC", "^NDX", "^FTSE", "^GDAXI", "^N225", "^HSI"]
@@ -139,3 +151,4 @@ async def fx(pairs: str = "EURUSD,GBPUSD,USDJPY,USDCHF,USDCAD"):
 @API.get("/health")
 async def health():
     return {"ok": True, "ts": now_ts()}
+
