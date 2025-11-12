@@ -1,12 +1,13 @@
 # free_feed_api.py — Free Market Feed for The Sanity Index
 # Uses open data sources ONLY (Yahoo, CoinGecko, ECB).
 # FIXED: Yahoo 429 (Too Many Requests) by requesting symbols individually.
+# FIXED: Route decorator conflict which broke /quote and /indices
 
 import time, httpx
 from typing import Dict, Any
 from fastapi import FastAPI, Query
 
-API = FastAPI(title="Sanity Free Feed API", version="1.1")
+API = FastAPI(title="Sanity Free Feed API", version="1.2")
 
 # ---------------------------------------------------------------------
 # Utilities
@@ -16,13 +17,11 @@ def now_ts() -> int:
     return int(time.time())
 
 async def get_json(url: str, params: Dict[str, Any] | None = None):
-    """HTTP GET helper with timeout + JSON parsing."""
     async with httpx.AsyncClient(timeout=10) as c:
         r = await c.get(url, params=params)
         r.raise_for_status()
         return r.json()
 
-# Simple TTL cache decorator
 def ttl_cache(ttl_seconds: int):
     def _decorator(func):
         cache, stamp = {}, {}
@@ -44,9 +43,9 @@ def ttl_cache(ttl_seconds: int):
 
 YF_URL = "https://query1.finance.yahoo.com/v7/finance/quote"
 
-@ttl_cache(30)  # 30 seconds cache avoids rate limits
+@ttl_cache(30)
 async def yahoo_quote_single(symbol: str):
-    """Fetch a single Yahoo Finance quote safely (avoids 429 errors)."""
+    """Fetch a single Yahoo Finance quote safely."""
     j = await get_json(YF_URL, params={"symbols": symbol})
     results = j.get("quoteResponse", {}).get("result", [])
     if not results:
@@ -66,28 +65,29 @@ async def yahoo_quote_single(symbol: str):
         }
     }
 
-@API.get("/indices")
+# ---------------------------------------------------------------------
+# FIXED /quote endpoint
+# ---------------------------------------------------------------------
 @API.get("/quote")
 async def quote(symbol: str = Query(..., alias="symbols")):
-    """
-    Single-symbol quote endpoint.
-    Usage:
-        /quote?symbols=^GSPC
-    """
     try:
         result = await yahoo_quote_single(symbol)
         return {"ts": now_ts(), "data": result}
     except Exception as e:
         return {"ts": now_ts(), "error": str(e)}
+
+# ---------------------------------------------------------------------
+# FIXED /indices endpoint
+# ---------------------------------------------------------------------
+@API.get("/indices")
 async def indices():
-    """Fetch multiple global indices (SPX/NDX/FTSE/DAX/N225/HSI) one-at-a-time."""
     symbols = ["^GSPC", "^NDX", "^FTSE", "^GDAXI", "^N225", "^HSI"]
     results = {}
 
     for sym in symbols:
         try:
-            quote = await yahoo_quote_single(sym)
-            results.update(quote)
+            data = await yahoo_quote_single(sym)
+            results.update(data)
         except Exception as e:
             results[sym] = {"error": str(e)}
 
@@ -110,7 +110,7 @@ async def crypto(ids: str = "bitcoin,ethereum", vs: str = "usd"):
     return await coingecko_prices(ids, vs)
 
 # ---------------------------------------------------------------------
-# FX (ECB daily) via Frankfurter API
+# FX - ECB via Frankfurter
 # ---------------------------------------------------------------------
 
 FX_URL = "https://api.frankfurter.app/latest"
@@ -126,15 +126,12 @@ async def fx_pairs(pairs="EURUSD,GBPUSD,USDJPY,USDCHF,USDCAD"):
 
         if a == "USD" and b in rates:
             return rates[b]
-
         if b == "USD" and a in rates:
             v = rates[a]
             return None if not v else 1.0 / v
-
         if a in rates and b in rates:
             va, vb = rates[a], rates[b]
             return None if not (va and vb) else vb / va
-
         return None
 
     out = {p: resolve(p) for p in pairs.split(",")}
@@ -147,8 +144,6 @@ async def fx(pairs: str = "EURUSD,GBPUSD,USDJPY,USDCHF,USDCAD"):
 # ---------------------------------------------------------------------
 # Health Check
 # ---------------------------------------------------------------------
-
 @API.get("/health")
 async def health():
     return {"ok": True, "ts": now_ts()}
-
