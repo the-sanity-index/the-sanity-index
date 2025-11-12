@@ -1,51 +1,48 @@
 # free_feed_api.py — Free Market Feed for The Sanity Index
-# Uses open data sources ONLY (Yahoo, CoinGecko, ECB).
-# FIXED: Yahoo 429 (Too Many Requests) by requesting symbols individually.
-# FIXED: Route decorator conflict which broke /quote and /indices
+# Fixed /quote and /indices endpoints — no decorator conflicts
 
 import time, httpx
 from typing import Dict, Any
 from fastapi import FastAPI, Query
 
-API = FastAPI(title="Sanity Free Feed API", version="1.2")
+API = FastAPI(title="Sanity Free Feed API", version="1.3")
 
 # ---------------------------------------------------------------------
 # Utilities
 # ---------------------------------------------------------------------
 
-def now_ts() -> int:
+def now_ts():
     return int(time.time())
 
-async def get_json(url: str, params: Dict[str, Any] | None = None):
+async def get_json(url: str, params=None):
     async with httpx.AsyncClient(timeout=10) as c:
         r = await c.get(url, params=params)
         r.raise_for_status()
         return r.json()
 
 def ttl_cache(ttl_seconds: int):
-    def _decorator(func):
+    def wrap(func):
         cache, stamp = {}, {}
-        async def _wrapper(*args, **kwargs):
+        async def inner(*args, **kwargs):
             key = (args, tuple(sorted(kwargs.items())))
             t = time.time()
             if key in cache and (t - stamp[key]) < ttl_seconds:
                 return cache[key]
-            res = await func(*args, **kwargs)
-            cache[key] = res
+            result = await func(*args, **kwargs)
+            cache[key] = result
             stamp[key] = t
-            return res
-        return _wrapper
-    return _decorator
+            return result
+        return inner
+    return wrap
 
 # ---------------------------------------------------------------------
-# Yahoo Finance (Delayed ~15 min)
+# Yahoo Finance (Delayed 15m) — Single-symbol fetch
 # ---------------------------------------------------------------------
 
 YF_URL = "https://query1.finance.yahoo.com/v7/finance/quote"
 
 @ttl_cache(30)
 async def yahoo_quote_single(symbol: str):
-    """Fetch a single Yahoo Finance quote safely."""
     j = await get_json(YF_URL, params={"symbols": symbol})
     results = j.get("quoteResponse", {}).get("result", [])
     if not results:
@@ -66,7 +63,7 @@ async def yahoo_quote_single(symbol: str):
     }
 
 # ---------------------------------------------------------------------
-# FIXED /quote endpoint
+# /quote — FIXED
 # ---------------------------------------------------------------------
 @API.get("/quote")
 async def quote(symbol: str = Query(..., alias="symbols")):
@@ -77,7 +74,7 @@ async def quote(symbol: str = Query(..., alias="symbols")):
         return {"ts": now_ts(), "error": str(e)}
 
 # ---------------------------------------------------------------------
-# FIXED /indices endpoint
+# /indices — FIXED
 # ---------------------------------------------------------------------
 @API.get("/indices")
 async def indices():
@@ -86,15 +83,15 @@ async def indices():
 
     for sym in symbols:
         try:
-            data = await yahoo_quote_single(sym)
-            results.update(data)
+            res = await yahoo_quote_single(sym)
+            results.update(res)
         except Exception as e:
             results[sym] = {"error": str(e)}
 
     return {"ts": now_ts(), "data": results}
 
 # ---------------------------------------------------------------------
-# Crypto (real-time) via CoinGecko
+# Crypto via CoinGecko
 # ---------------------------------------------------------------------
 
 CG_URL = "https://api.coingecko.com/api/v3/simple/price"
@@ -102,15 +99,14 @@ CG_URL = "https://api.coingecko.com/api/v3/simple/price"
 @ttl_cache(5)
 async def coingecko_prices(ids="bitcoin,ethereum", vs="usd"):
     j = await get_json(CG_URL, params={"ids": ids, "vs_currencies": vs})
-    out = {k.upper(): {vs.upper(): v.get(vs)} for k, v in j.items()}
-    return {"ts": now_ts(), "data": out}
+    return {"ts": now_ts(), "data": {k.upper(): {vs.upper(): v.get(vs)} for k, v in j.items()}}
 
 @API.get("/crypto")
 async def crypto(ids: str = "bitcoin,ethereum", vs: str = "usd"):
     return await coingecko_prices(ids, vs)
 
 # ---------------------------------------------------------------------
-# FX - ECB via Frankfurter
+# FX via Frankfurter / ECB
 # ---------------------------------------------------------------------
 
 FX_URL = "https://api.frankfurter.app/latest"
@@ -120,29 +116,27 @@ async def fx_pairs(pairs="EURUSD,GBPUSD,USDJPY,USDCHF,USDCAD"):
     j = await get_json(FX_URL, params={"base": "USD"})
     rates = j.get("rates", {})
 
-    def resolve(pair: str):
-        pair = pair.upper().strip()
+    def resolve(pair):
+        pair = pair.upper()
         a, b = pair[:3], pair[3:]
-
         if a == "USD" and b in rates:
             return rates[b]
         if b == "USD" and a in rates:
             v = rates[a]
-            return None if not v else 1.0 / v
+            return None if not v else 1.0/v
         if a in rates and b in rates:
-            va, vb = rates[a], rates[b]
-            return None if not (va and vb) else vb / va
+            if rates[a] and rates[b]:
+                return rates[b] / rates[a]
         return None
 
-    out = {p: resolve(p) for p in pairs.split(",")}
-    return {"date": j.get("date"), "base": "USD", "data": out}
+    return {"date": j.get("date"), "base": "USD", "data": {p: resolve(p) for p in pairs.split(",")}}
 
 @API.get("/fx")
 async def fx(pairs: str = "EURUSD,GBPUSD,USDJPY,USDCHF,USDCAD"):
     return await fx_pairs(pairs)
 
 # ---------------------------------------------------------------------
-# Health Check
+# Health
 # ---------------------------------------------------------------------
 @API.get("/health")
 async def health():
