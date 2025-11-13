@@ -1,83 +1,76 @@
-# app.py — The Sanity Index
-# Main Streamlit dashboard using free data feeds and modular UI helpers
-
-import os
-import httpx
+import streamlit as st
 import pandas as pd
 import plotly.graph_objs as go
-import streamlit as st
 from PIL import Image
+import os
+import httpx
 
-# -------------------------------------------------------------------------
-# UI helpers
-# -------------------------------------------------------------------------
-from sanity_ui import sanity_title, sanity_caption, sanity_section, sanity_inject_css
-sanity_inject_css(theme="dark")
-
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------
 # Page setup
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------
 st.set_page_config(page_title="The Sanity Index", layout="centered")
 
-# -------------------------------------------------------------------------
-# Header & Logos
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------
+# Load logos safely
+# --------------------------------------------------------------------
 try:
     sanity_logo = Image.open("sanity_logo.png")
     labyrinth_logo = Image.open("labyrinth_logo.png")
+except:
+    sanity_logo = labyrinth_logo = None
 
-    col1, col2, col3 = st.columns([1, 3, 1])
-    with col1:
+# --------------------------------------------------------------------
+# Header layout
+# --------------------------------------------------------------------
+col1, col2, col3 = st.columns([1, 3, 1])
+
+with col1:
+    if labyrinth_logo:
         st.image(labyrinth_logo, width=150)
-    with col2:
-        st.markdown(
-            "<h1 style='text-align:center;color:silver;'>THE SANITY INDEX</h1>"
-            "<p style='text-align:center;color:gray;'>Cutting Through the Chaos</p>",
-            unsafe_allow_html=True
-        )
-    with col3:
-        st.image(sanity_logo, width=150)
-except Exception:
+
+with col2:
     st.markdown(
-        """
-        <div style="text-align:center;">
-            <h1 style="color:silver;">THE SANITY INDEX</h1>
-            <p style="color:gray;font-size:18px;">Cutting Through the Chaos</p>
-        </div>
-        """,
+        "<h1 style='text-align:center;color:silver;'>THE SANITY INDEX</h1>"
+        "<p style='text-align:center;color:gray;'>Cutting Through the Chaos</p>",
         unsafe_allow_html=True
     )
 
-st.markdown("<hr style='border:1px solid silver;'>", unsafe_allow_html=True)
+with col3:
+    if sanity_logo:
+        st.image(sanity_logo, width=150)
 
-# -------------------------------------------------------------------------
-# Live Board (free feed API)
-# -------------------------------------------------------------------------
-API_BASE = os.getenv("SANITY_API_BASE", "http://localhost:8000")  # set this in Render env vars
+st.markdown("<hr>", unsafe_allow_html=True)
+
+# --------------------------------------------------------------------
+# Helper for API calls
+# --------------------------------------------------------------------
+API_BASE = os.getenv("SANITY_API_BASE", "http://localhost:8000")
 
 def fetch_json(path, params=None, default=None):
-    """Simple helper for HTTP GET requests with fail-safe."""
     try:
-        with httpx.Client(timeout=4) as c:
+        with httpx.Client(timeout=8) as c:
             r = c.get(f"{API_BASE}{path}", params=params)
             r.raise_for_status()
             return r.json()
-    except Exception:
-        return default
+    except:
+        return default or {}
 
+# --------------------------------------------------------------------
+# LIVE BOARD
+# --------------------------------------------------------------------
 st.markdown("### Live Board (Free Feeds)")
 
 quotes = fetch_json("/indices") or {}
 crypto = fetch_json("/crypto") or {}
 
-# ----- INDICES -----
+# ---------------------- INDICES ----------------------
 if quotes.get("data"):
     q = quotes["data"]
 
     def safe(sym):
         try:
             return q[sym].get("last", "—")
-        except Exception:
+        except:
             return "—"
 
     st.markdown(
@@ -87,14 +80,14 @@ if quotes.get("data"):
         f"**DAX** {safe('DAX')}"
     )
 
-# ----- CRYPTO -----
+# ---------------------- CRYPTO ----------------------
 if crypto.get("data"):
     c = crypto["data"]
 
     def csafe(sym):
         try:
             return c[sym]
-        except Exception:
+        except:
             return "—"
 
     st.markdown(
@@ -102,13 +95,16 @@ if crypto.get("data"):
         f"**ETH** ${csafe('ETH')}"
     )
 
-# -------------------------------------------------------------------------
-# Load Data (headline & section scores)
-# -------------------------------------------------------------------------
+st.markdown("<hr>", unsafe_allow_html=True)
+
+# --------------------------------------------------------------------
+# Load Data (Headline + Section scores)
+# --------------------------------------------------------------------
+
 try:
     mom_df = pd.read_csv("mom_scores.csv", parse_dates=["date"])
-except FileNotFoundError:
-    st.error("'mom_scores.csv' not found. Place it beside app.py.")
+except:
+    st.error("'mom_scores.csv' missing.")
     st.stop()
 
 try:
@@ -116,83 +112,61 @@ try:
     if "Unnamed: 0" in section_df.columns:
         section_df.rename(columns={"Unnamed: 0": "date"}, inplace=True)
     section_df["date"] = pd.to_datetime(section_df["date"])
-except FileNotFoundError:
-    st.error("'section_scores.csv' not found. Place it beside app.py.")
+except:
+    st.error("'section_scores.csv' missing.")
     st.stop()
 
-# -------------------------------------------------------------------------
-# Headline Sanity Index Chart
-# -------------------------------------------------------------------------
-sanity_title(
-    title="Headline Sanity Index",
-    subtitle="Overall System Stress (0–100) — 50 = baseline",
-    theme="dark"
-)
+# --------------------------------------------------------------------
+# Headline chart
+# --------------------------------------------------------------------
+st.subheader("Headline Sanity Index")
 
 fig1 = go.Figure()
 fig1.add_trace(go.Scatter(
-    x=mom_df["date"],
-    y=mom_df["MoM_raw"],
-    mode="lines",
-    name="Raw Index",
+    x=mom_df["date"], y=mom_df["MoM_raw"],
+    mode="lines", name="Raw Index",
     line=dict(dash="dot", color="silver")
 ))
 fig1.add_trace(go.Scatter(
-    x=mom_df["date"],
-    y=mom_df["MoM_smoothed"],
-    mode="lines",
-    name="Smoothed (3 mo EWMA)",
+    x=mom_df["date"], y=mom_df["MoM_smoothed"],
+    mode="lines", name="Smoothed (3 mo EWMA)",
     line=dict(width=3, color="white")
 ))
 fig1.add_hline(y=50, line=dict(dash="dash", color="gray"))
+
 fig1.update_layout(
     paper_bgcolor="#141210",
     plot_bgcolor="#141210",
     font=dict(color="silver"),
     xaxis_title="Date",
     yaxis_title="Score",
-    yaxis=dict(range=[0, 100]),
-    showlegend=True,
+    yaxis=dict(range=[0, 100])
 )
+
 st.plotly_chart(fig1, use_container_width=True)
 
-csv_mom = mom_df.to_csv(index=False).encode("utf-8")
 st.download_button(
     "Download Headline Data",
-    data=csv_mom,
-    file_name="mom_scores.csv",
-    mime="text/csv",
+    data=mom_df.to_csv(index=False).encode("utf-8"),
+    file_name="mom_scores.csv"
 )
 
-sanity_caption(
-    source="Labyrinth Analytics — MoM Engine",
-    date=mom_df["date"].max().strftime("%d %b %Y"),
-    status="Stable",
-    quote="Reality, without the garnish.",
-    theme="dark",
-)
+# --------------------------------------------------------------------
+# Section chart
+# --------------------------------------------------------------------
+st.subheader("Module Scores")
 
-# -------------------------------------------------------------------------
-# Section Selector + Chart
-# -------------------------------------------------------------------------
-sanity_section(
-    name="Module Scores",
-    kicker="Select a module to view its historical stress level (0–100).",
-    theme="dark",
-)
-
-section_cols = [col for col in section_df.columns if col != "date"]
-selected = st.selectbox("Choose a module:", section_cols, index=0)
+section_cols = [c for c in section_df.columns if c != "date"]
+selected = st.selectbox("Choose a module:", section_cols)
 
 fig2 = go.Figure()
 fig2.add_trace(go.Scatter(
-    x=section_df["date"],
-    y=section_df[selected],
+    x=section_df["date"], y=section_df[selected],
     mode="lines+markers",
-    name=selected,
-    line=dict(color="silver"),
+    line=dict(color="silver")
 ))
 fig2.add_hline(y=50, line=dict(dash="dash", color="gray"))
+
 fig2.update_layout(
     paper_bgcolor="#141210",
     plot_bgcolor="#141210",
@@ -200,33 +174,20 @@ fig2.update_layout(
     xaxis_title="Date",
     yaxis_title="Score",
     yaxis=dict(range=[0, 100]),
-    title=f"{selected.replace('_', ' ').title()} (0–100)",
+    title=f"{selected.replace('_', ' ').title()} (0–100)"
 )
+
 st.plotly_chart(fig2, use_container_width=True)
 
-csv_section = section_df[["date", selected]].to_csv(index=False).encode("utf-8")
 st.download_button(
     f"Download {selected} Data",
-    data=csv_section,
-    file_name=f"section_{selected}.csv",
-    mime="text/csv",
+    data=section_df[["date", selected]].to_csv(index=False).encode("utf-8"),
+    file_name=f"{selected}_data.csv"
 )
 
-sanity_caption(
-    source="Labyrinth Analytics — MoM Engine",
-    date=section_df["date"].max().strftime("%d %b %Y"),
-    status="Stable",
-    quote="We measure what matters, not what trends.",
-    theme="dark",
-)
-
-# -------------------------------------------------------------------------
-# Footer
-# -------------------------------------------------------------------------
 st.markdown(
     "<hr><p style='text-align:center;color:gray;font-size:12px;'>"
-    "Powered by Labyrinth Analytics © 2025  •  Reality, without the garnish."
+    "Powered by Labyrinth Analytics © 2025"
     "</p>",
-    unsafe_allow_html=True,
+    unsafe_allow_html=True
 )
-
