@@ -68,19 +68,38 @@ def fetch_json(path, params=None, default=None):
 st.markdown("### Live Board (Free Feeds)")
 
 quotes = fetch_json("/indices") or {}
-crypto = fetch_json("/crypto", {"ids": "bitcoin,ethereum"}) or {}
+crypto = fetch_json("/crypto") or {}
 
+# ----- INDICES -----
 if quotes.get("data"):
     q = quotes["data"]
+
+    def safe(sym):
+        try:
+            return q[sym].get("last", "—")
+        except Exception:
+            return "—"
+
     st.markdown(
-        f"**SPX** {q['^GSPC']['last']}  |  **NDX** {q['^NDX']['last']}  |  "
-        f"**FTSE** {q['^FTSE']['last']}  |  **DAX** {q['^GDAXI']['last']}"
+        f"**SPX** {safe('SPX')}  |  "
+        f"**NDX** {safe('NDX')}  |  "
+        f"**FTSE** {safe('FTSE')}  |  "
+        f"**DAX** {safe('DAX')}"
     )
 
+# ----- CRYPTO -----
 if crypto.get("data"):
     c = crypto["data"]
+
+    def csafe(sym):
+        try:
+            return c[sym]
+        except Exception:
+            return "—"
+
     st.markdown(
-        f"**BTC** ${c['BITCOIN']['USD']}  |  **ETH** ${c['ETHEREUM']['USD']}"
+        f"**BTC** ${csafe('BTC')}  |  "
+        f"**ETH** ${csafe('ETH')}"
     )
 
 # -------------------------------------------------------------------------
@@ -210,3 +229,4 @@ st.markdown(
     "</p>",
     unsafe_allow_html=True,
 )
+
