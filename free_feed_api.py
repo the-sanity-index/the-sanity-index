@@ -1,26 +1,59 @@
 # free_feed_api.py — Free Market Feed for The Sanity Index
-# Uses stable, free, zero-rate-limit APIs:
-# - Binance (crypto, real-time)
-# - Financial Modeling Prep (indices, free demo key)
-# - Frankfurter (FX via ECB)
+# Final version: Binance crypto (unlimited), Stooq indices (CSV), Frankfurter FX.
 
-import time, httpx
-from fastapi import FastAPI, Query
+import time
+import httpx
+import csv
+from io import StringIO
+from fastapi import FastAPI
 
-API = FastAPI(title="Sanity Free Feed API", version="2.0")
+API = FastAPI(title="Sanity Free Feed API", version="3.0")
 
-def now_ts():
+# ---------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------
+
+def now_ts() -> int:
     return int(time.time())
 
-async def get_json(url, params=None):
+
+async def fetch_text(url: str):
+    """Fetch raw text (used for Stooq CSV endpoints)."""
+    async with httpx.AsyncClient(timeout=10) as c:
+        r = await c.get(url)
+        r.raise_for_status()
+        return r.text
+
+
+async def fetch_json(url: str, params=None):
+    """Fetch JSON for Binance and FX."""
     async with httpx.AsyncClient(timeout=10) as c:
         r = await c.get(url, params=params)
         r.raise_for_status()
         return r.json()
 
-# -------------------------------------------------------------------------
-# CRYPTO — Binance (unlimited)
-# -------------------------------------------------------------------------
+
+def parse_stooq_csv(raw: str):
+    """
+    Stooq returns a single CSV row:
+    SYMBOL,DATE,TIME,OPEN,HIGH,LOW,CLOSE,VOLUME
+    We extract CLOSE.
+    """
+    f = StringIO(raw)
+    reader = csv.reader(f)
+    row = next(reader)
+
+    # CLOSE price is index 6
+    if len(row) > 6 and row[6] not in ["", "N/A", None]:
+        try:
+            return float(row[6])
+        except:
+            return None
+    return None
+
+# ---------------------------------------------------------------------
+# CRYPTO — Binance (no rate limits)
+# ---------------------------------------------------------------------
 
 @API.get("/crypto")
 async def crypto():
@@ -28,62 +61,66 @@ async def crypto():
         "BTC": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
         "ETH": "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT",
     }
+
     out = {}
     for sym, url in urls.items():
         try:
-            j = await get_json(url)
+            j = await fetch_json(url)
             out[sym] = float(j["price"])
         except Exception as e:
             out[sym] = {"error": str(e)}
+
     return {"ts": now_ts(), "data": out}
 
-# -------------------------------------------------------------------------
-# INDICES — FMP demo key (zero rate limits)
-# -------------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# INDICES — Stooq (no keys, no rate limits)
+# ---------------------------------------------------------------------
 
-FMP = "https://financialmodelingprep.com/api/v3/quote/{symbol}?apikey=demo"
+STOOQ_URL = "https://stooq.com/q/l/?s={symbol}&i=d"
 
-INDEX_SYMBOLS = {
-    "SPX": "%5EGSPC",
-    "NDX": "%5ENDX",
-    "FTSE": "%5EFTSE",
-    "DAX": "%5EGDAXI",
-    "N225": "%5EN225",
-    "HSI": "%5EHSI"
+STOOQ_SYMBOLS = {
+    "SPX": "^spx",     # S&P 500
+    "NDX": "^ndx",     # Nasdaq 100
+    "FTSE": "^ftse",   # FTSE 100
+    "DAX": "^dax",     # DAX 40
+    "N225": "^nkx",    # Nikkei (Stooq uses NKX)
+    "HSI": "^hsi",     # Hang Seng
 }
 
 @API.get("/indices")
 async def indices():
     out = {}
-    for name, symbol in INDEX_SYMBOLS.items():
-        url = FMP.format(symbol=symbol)
+
+    for name, stoq_symbol in STOOQ_SYMBOLS.items():
         try:
-            j = await get_json(url)
-            if isinstance(j, list) and j:
-                out[name] = {
-                    "last": j[0]["price"],
-                    "change": j[0]["change"],
-                    "percent": j[0]["changesPercentage"],
-                    "name": j[0]["name"]
-                }
+            url = STOOQ_URL.format(symbol=stoq_symbol)
+            raw = await fetch_text(url)
+            price = parse_stooq_csv(raw)
+
+            if price is not None:
+                out[name] = {"last": price}
             else:
-                out[name] = {"error": "No data returned"}
+                out[name] = {"error": "No data"}
         except Exception as e:
             out[name] = {"error": str(e)}
+
     return {"ts": now_ts(), "data": out}
 
-# -------------------------------------------------------------------------
-# FX — ECB via Frankfurter (daily)
-# -------------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# FX — Frankfurter (ECB)
+# ---------------------------------------------------------------------
 
 @API.get("/fx")
 async def fx():
-    j = await get_json("https://api.frankfurter.app/latest", params={"base": "USD"})
-    return {"date": j.get("date"), "data": j.get("rates", {})}
+    try:
+        j = await fetch_json("https://api.frankfurter.app/latest", params={"base": "USD"})
+        return {"date": j.get("date"), "data": j.get("rates", {})}
+    except Exception as e:
+        return {"error": str(e)}
 
-# -------------------------------------------------------------------------
-# Health check
-# -------------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# Health
+# ---------------------------------------------------------------------
 
 @API.get("/health")
 async def health():
